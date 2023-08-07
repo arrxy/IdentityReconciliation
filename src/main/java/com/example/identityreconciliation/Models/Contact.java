@@ -54,7 +54,7 @@ public class Contact {
     }
 
     public Contact createNthInstance(String phoneNumber, String email, Integer linkedId) {
-        return new Contact(phoneNumber, email, linkedId, "primary");
+        return new Contact(phoneNumber, email, linkedId, "secondary");
     }
 
 }
