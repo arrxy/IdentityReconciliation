@@ -10,7 +10,7 @@ WORKDIR /app
 ENV JAVA_HOME=/usr/lib/jvm/java-19-openjdk-amd64
 RUN ./gradlew bootJar --no-daemon
 
-FROM openjdk:17-jdk-slim
+FROM openjdk:19-jdk-slim
 
 EXPOSE 8080
 
