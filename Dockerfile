@@ -7,7 +7,7 @@ COPY . /app
 WORKDIR /app
 
 # Set environment variable for Gradle build
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-19-openjdk-amd64
 RUN ./gradlew bootJar --no-daemon
 
 FROM openjdk:17-jdk-slim
