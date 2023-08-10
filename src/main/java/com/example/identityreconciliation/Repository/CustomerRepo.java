@@ -13,7 +13,8 @@ public interface CustomerRepo extends JpaRepository<Contact, Long> {
     List<Contact> findAllByEmail(String email);
     List<Contact> findAllByPhoneNumber(String phoneNumber);
     Contact findByEmailAndPhoneNumber(String email, String phoneNumber);
-
+    @Query("SELECT c FROM Contact c WHERE c.linkedId = ?1 or c.id = ?1")
+    List<Contact> findAllByLinkedIdOrId(int id);
     @Query("SELECT c FROM Contact c WHERE c.email = ?1 or c.phoneNumber = ?2")
     List<Contact> findAllByEmailOrPhoneNumber(String email, String phoneNumber);
 

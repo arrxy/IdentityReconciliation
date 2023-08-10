@@ -32,6 +32,10 @@ public class AddOrGetCustomerService {
         } else {
             list = customerRepo.findByPhoneNumber(phoneNumber);
         }
+        if (!list.isEmpty()) {
+            int pid = Optional.ofNullable(list.get(0).getLinkedId()).orElse(list.get(0).getId());
+            list = customerRepo.findAllByLinkedIdOrId(pid);
+        }
         return generateResponse(list);
     }
 
