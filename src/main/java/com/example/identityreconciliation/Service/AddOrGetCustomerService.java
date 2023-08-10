@@ -23,8 +23,7 @@ public class AddOrGetCustomerService {
         String phoneNumber = identifyReq.getPhoneNumber();
         String email = identifyReq.getEmail();
         if (phoneNumber != null && email != null) {
-            saveCustomerOrLinkCustomers(phoneNumber, email);
-            return null;
+            return generateResponse(saveCustomerOrLinkCustomers(phoneNumber, email));
         }
         List<Contact> list = new ArrayList<>();
         if (phoneNumber == null) {
@@ -52,23 +51,22 @@ public class AddOrGetCustomerService {
         }
         return new IdentifyResponseDto(contactDto);
     }
-    private Contact saveCustomerOrLinkCustomers(String phoneNumber, String email) {
+    private List<Contact> saveCustomerOrLinkCustomers(String phoneNumber, String email) {
         List<Contact> contact = customerRepo.findAllByEmailOrPhoneNumber(email, phoneNumber);
         if (contact.isEmpty()) {
-            return saveFirstCustomerEntity(phoneNumber, email);
+            return List.of(saveFirstCustomerEntity(phoneNumber, email));
         } else {
             List<Contact> emailContacts = customerRepo.findByEmail(email);
             List<Contact> phoneContacts = customerRepo.findByPhoneNumber(phoneNumber);
             if (!emailContacts.isEmpty() && !phoneContacts.isEmpty()) {
-                linkContacts(emailContacts, phoneContacts);
-                return null;
+                return linkContacts(emailContacts, phoneContacts);
             }
         }
         int linkedId = Optional.ofNullable(contact.get(0).getLinkedId()).orElse(contact.get(0).getId());
-        return saveNthCustomerEntity(phoneNumber, email, linkedId);
+        return List.of(saveNthCustomerEntity(phoneNumber, email, linkedId));
     }
 
-    private void linkContacts(List<Contact> list1, List<Contact> list2) {
+    private List<Contact> linkContacts(List<Contact> list1, List<Contact> list2) {
         List<Contact> list = new ArrayList<>();
         for (var contact: list1) {
             list.add(contact);
@@ -82,6 +80,7 @@ public class AddOrGetCustomerService {
             list.get(i).setLinkPrecedence("secondary");
         }
         customerRepo.saveAll(list);
+        return list;
     }
 
     private Contact saveFirstCustomerEntity(String phoneNumber, String email) {
