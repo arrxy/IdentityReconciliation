@@ -1,4 +1,5 @@
 # Build stage
+# Build stage
 FROM ubuntu:latest AS build
 
 RUN apt-get update
@@ -6,7 +7,9 @@ RUN apt-get install -y openjdk-17-jdk
 COPY . /app
 WORKDIR /app
 
-RUN ./gradlew bootJar --no-daemon -Dorg.gradle.java.home=/usr/lib/jvm/openjdk-17
+# Set environment variable for Gradle build
+ENV JAVA_HOME=/usr/lib/jvm/openjdk-17
+RUN ./gradlew bootJar --no-daemon
 
 FROM openjdk:17-jdk-slim
 
