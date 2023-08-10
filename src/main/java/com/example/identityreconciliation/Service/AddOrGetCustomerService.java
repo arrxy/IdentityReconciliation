@@ -8,10 +8,7 @@ import com.example.identityreconciliation.Repository.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AddOrGetCustomerService {
@@ -68,11 +65,18 @@ public class AddOrGetCustomerService {
 
     private List<Contact> linkContacts(List<Contact> list1, List<Contact> list2) {
         List<Contact> list = new ArrayList<>();
+        Set<Integer> uniqueIds = new HashSet<>();
         for (var contact: list1) {
-            list.add(contact);
+            if (!uniqueIds.contains(contact.getId())) {
+                list.add(contact);
+                uniqueIds.add(contact.getId());
+            }
         }
         for (var contact: list2) {
-            list.add(contact);
+            if (!uniqueIds.contains(contact.getId())) {
+                list.add(contact);
+                uniqueIds.add(contact.getId());
+            }
         }
         list.sort(Comparator.comparing(Contact::getCreatedAt));
         for (int i = 1; i < list.size(); ++i) {
