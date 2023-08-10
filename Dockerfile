@@ -1,11 +1,12 @@
+# Build stage
 FROM ubuntu:latest AS build
 
 RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY . .
-RUN chmod +x ./gradlew
-RUN ls -l
-RUN ./gradlew bootJar
+RUN apt-get install -y openjdk-17-jdk
+COPY . /app
+WORKDIR /app
+
+RUN ./gradlew bootJar --no-daemon -Dorg.gradle.java.home=/usr/lib/jvm/openjdk-17
 
 FROM openjdk:17-jdk-slim
 
