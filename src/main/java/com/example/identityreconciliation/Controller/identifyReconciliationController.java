@@ -22,4 +22,9 @@ public class identifyReconciliationController {
     public ResponseEntity<?> identifyCustomer(@Valid @RequestBody IdentifyReqDto identifyReq) {
         return ResponseEntity.ok(new SuccessResponse<>(addOrGetCustomerService.fetchOrSave(identifyReq)));
     }
+
+    @GetMapping("/get-version")
+    public ResponseEntity<?> getVersion() {
+        return ResponseEntity.ok(new SuccessResponse<>("version: 1.0.0"));
+    }
 }
